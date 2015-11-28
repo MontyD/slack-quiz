@@ -1,34 +1,24 @@
-var questions = require('./data/questions');
+var question = require('./models/questions');
 
 quizMe =  function(message, username) {
   var response = "",
-    question = "",
     idRegex = /#([0-9])*/g,
     icon = "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png";
   if (message.indexOf('--help') > -1) {
     return {
-      text: "Use 'QUIZME new question' to request a new question, this will return a question ID plus a question, use this question ID a space and then your answer to return an answer! You can request multiple choice options using --options, or a hint using --hint. If you forget what the question is you can get the current question using --currentquestion",
+      text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question with 'QUIZME answer: ', and then your answer. You can request multiple choice options using --options, or a hint using --hint. If you forget what the question is you can get the current question using --currentquestion",
       attachments: [],
       username: 'QuizMe!',
       icon_url: icon
     }
   } else if (message.indexOf('new question') > -1) {
-    //NEW QUESTION
-    var questionID = Math.floor(Math.random() * questions.length);
-    for (i = 0; i < questions.length; i++){
-      if (i === questionID) {
-        questions[i].currentquestion = true;
-      } else {
-          questions[questionID].currentquestion = false;
-      }
-    }
     return {
-      text: "#" + String(questionID) + ": " + questions[questionID].question,
+      text: 'New question requested',
       attachments: [],
       username: 'QuizMe!',
       icon_url: icon
     }
-  } else if (idRegex.test(message)) {
+  } else if (message.indexOf('answer:') > -1) {
     var reqQuestionId = parseInt(message.match(idRegex)[0].substr(2));
     var reqAnswer = message.replace(idRegex, "").trim();
     if (reqQuestionId > -1 && reqQuestionId < questions.length) {

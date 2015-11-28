@@ -12,9 +12,22 @@ router.get('/', function(req, res, next) {
   res.render('../views/index', {title: 'QuizMe!'});
 });
 
+router.get('/RANDquest', function(req, res, next){
+  question.random(function(err, data) {
+    data.currentQuestion = true;
+    res.send('QUESTION: ' + data.question);
+  });
+})
+
+router.get('/Allquest', function(req, res, next){
+  question.find({}, function(err, data) {
+    data.currentQuestion = true;
+    res.json(data);
+  });
+})
+
 /* Slack post request */
 router.post('/', function(req, res) {
-  'use strict';
   var content = req.body.text;
   if ( req.body.trigger_word ) {
     content = content.substr( req.body.trigger_word.length ).trim()
@@ -37,6 +50,7 @@ router.post('/newQuestion', function(req, res) {
     option4: req.body.option4,
     hint: req.body.hint,
     intendedFor: req.body.intended,
+    completed: false,
     currentQuestion: false
   });
   newQuestion.save(function(err) {
@@ -47,7 +61,7 @@ router.post('/newQuestion', function(req, res) {
       console.log('done');
       res.send('done');
     }
-    });
+  });
 });
 
 module.exports = router;

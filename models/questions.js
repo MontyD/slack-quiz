@@ -12,6 +12,7 @@ var question = new Schema({
   created_at : Date,
   intendedFor: String,
   answeredBy: String,
+  completed: Boolean,
   currentQuestion: Boolean
 });
 question.pre('save', function(next) {
@@ -21,6 +22,15 @@ question.pre('save', function(next) {
     this.created_at = currentDate;
   next();
 });
+question.statics.random = function(callback) {
+  this.count(function(err, count) {
+    if (err) {
+      return callback(err);
+    }
+    var rand = Math.floor(Math.random() * count);
+    this.findOne().skip(rand).exec(callback);
+  }.bind(this));
+};
 
 var question = mongoose.model('Question', question);
 
