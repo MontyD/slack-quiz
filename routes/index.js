@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var quizMe = require('../quiz');
+var mongoose = require('mongoose');
+var mongo = require('mongodb');
 var sanitize = require("mongo-sanitize");
 var question = require('../models/questions');
 
@@ -38,7 +40,13 @@ router.post('/newQuestion', function(req, res) {
     currentQuestion: false
   });
   newQuestion.save(function(err) {
-    if (err) throw err;
+    if (err) {
+      console.log(err);
+      res.send(err);
+    } else {
+      console.log('done');
+      res.send('done');
+    }
     });
 });
 

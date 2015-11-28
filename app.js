@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var mongo = require('mongodb');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
@@ -18,6 +19,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/quizme';
+var connection = mongoose.connect(dbUrl);
 
 app.use('/', routes);
 
@@ -50,13 +54,6 @@ app.use(function(err, req, res, next) {
     message: err.message,
     error: {}
   });
-});
-
-var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/quizme';
-var connection = mongoose.createConnection(dbUrl);
-connection.on('error', console.error.bind(console, 'connection error:'));
-connection.once('open', function () {
-  console.info('connected to database')
 });
 
 module.exports = app;
