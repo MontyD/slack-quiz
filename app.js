@@ -52,7 +52,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var dbUrl = 'mongodb://localhost/quizme';
+var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/quizme';
 var connection = mongoose.createConnection(dbUrl);
 connection.on('error', console.error.bind(console, 'connection error:'));
 connection.once('open', function () {
