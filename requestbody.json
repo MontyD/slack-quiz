@@ -1,0 +1,11 @@
+{ token: 'nIJ0fUBL5xB8AyP7FaSQD7w6',
+  team_id: 'T0FEGD68G',
+  team_domain: 'testintegration',
+  service_id: '15492662962',
+  channel_id: 'C0FEF80RF',
+  channel_name: 'general',
+  timestamp: '1448708304.000002',
+  user_id: 'U0FEBHDUM',
+  user_name: 'montydawson',
+  text: 'Test',
+  trigger_word: 'Test' }
