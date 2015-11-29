@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 var quizMe = require('../quiz');
 var mongoose = require('mongoose');
-var mongo = require('mongodb');
 var sanitize = require("mongo-sanitize");
 var question = require('../models/questions');
 
@@ -13,16 +12,26 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/RANDquest', function(req, res, next){
-  question.update({currentQuestion: true}, {currentQuestion: false}, { multi: true });
+  question.update({currentQuestion: true}, { $set: {currentQuestion: false} }, { multi: true }).exec();
   question.random(function(err, data) {
-    data.currentQuestion = true;
+    //data.currentQuestion = true;
+    //data.save();
     res.send('QUESTION: ' + data.question);
+  });
+})
+
+router.get('/currAnswer', function(req, res, next){
+  question.findOne( { 'currentQuestion': true }, 'answer', function(err, data){
+    if (data) {
+      res.send('answer ' + data.answer);
+    } else {
+      res.send('nothing');
+    }
   });
 })
 
 router.get('/Allquest', function(req, res, next){
   question.find({}, function(err, data) {
-    data.currentQuestion = true;
     res.json(data);
   });
 })
@@ -55,10 +64,8 @@ router.post('/newQuestion', function(req, res) {
   });
   newQuestion.save(function(err) {
     if (err) {
-      console.log(err);
       res.send(err);
     } else {
-      console.log('done');
       res.send('done');
     }
   });

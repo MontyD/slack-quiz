@@ -21,7 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/quizme';
-var connection = mongoose.connect(dbUrl);
+mongoose.connect(dbUrl);
 
 app.use('/', routes);
 
