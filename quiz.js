@@ -15,10 +15,14 @@ quizMe = function(message, username) {
       data.save();
       reqNewQuestion = data.question;
     });
-    resText = reqNewQuetion;
+    console.log(reqNewQuestion);
+    resText = reqNewQuestion;
   } else {
     question.findOne({ 'currentQuestion': true }, 'answer', function(err, data) {
+      console.log('findone');
       if (data) {
+        console.log('data');
+        console.log(data.answer);
         if (message.toLowerCase().substr(0, message.length -1).trim() === data.answer.toLowerCase().substr(0, data.answer.length -1).trim()) {
           resText = "Your answer " + message.trim() + " is Correct! Five form points! Get yourself a new question using 'QUIZME new question'.";
           icon = "http://www.clker.com/cliparts/7/y/R/Y/J/T/correct-mark-hi.png";
