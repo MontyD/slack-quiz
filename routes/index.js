@@ -14,8 +14,8 @@ router.get('/', function(req, res, next) {
 router.get('/RANDquest', function(req, res, next){
   question.update({currentQuestion: true}, { $set: {currentQuestion: false} }, { multi: true }).exec();
   question.random(function(err, data) {
-    //data.currentQuestion = true;
-    //data.save();
+    data.currentQuestion = true;
+    data.save();
     res.send('QUESTION: ' + data.question);
   });
 })
@@ -42,8 +42,7 @@ router.post('/', function(req, res) {
   if ( req.body.trigger_word ) {
     content = content.substr( req.body.trigger_word.length ).trim()
   }
-  var sendRes = quizMe(content, req.body.user_name);
-  res.json(sendRes);
+  quizMe(content, req.body.user_name, res);
 });
 
 router.post('/newQuestion', function(req, res) {
