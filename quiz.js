@@ -9,14 +9,11 @@ quizMe = function(message, username) {
     resText = "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options (this will make the question only worth half points), or a hint using --hint (this will make the question only worth 3/4 points). If you forget what the question is you can get the current question using --currentquestion";
   } else if (message.indexOf('new question') > -1) {
     var reqNewQuestion = '';
-    console.log('new question');
     question.update({ currentQuestion: true }, { $set: { currentQuestion: false } }, { multi: true }).exec();
     question.random(function(err, data) {
       data.currentQuestion = true;
       data.save();
-      console.log(data.question);
       reqNewQuestion = data.question;
-      console.log('reqNewQuetion');
     });
     resText = reqNewQuetion;
   } else {
@@ -35,7 +32,7 @@ quizMe = function(message, username) {
     });
   }
   return {
-    text: reqNewQuestion,
+    text: resText,
     attachments: resAttach,
     username: 'QuizMe!',
     icon_url: resIcon
