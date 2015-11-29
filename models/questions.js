@@ -6,7 +6,6 @@ var question = new Schema({
   option1: { type: String, required: true },
   option2: { type: String, required: true },
   option3: { type: String, required: true },
-  option4: { type: String, required: true },
   hint: { type: String, required: true },
   updated_at : Date,
   created_at : Date,

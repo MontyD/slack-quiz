@@ -13,6 +13,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/RANDquest', function(req, res, next){
+  question.update({currentQuestion: true}, {currentQuestion: false}, { multi: true });
   question.random(function(err, data) {
     data.currentQuestion = true;
     res.send('QUESTION: ' + data.question);
@@ -47,7 +48,6 @@ router.post('/newQuestion', function(req, res) {
     option1: req.body.option1,
     option2: req.body.option2,
     option3: req.body.option3,
-    option4: req.body.option4,
     hint: req.body.hint,
     intendedFor: req.body.intended,
     completed: false,
