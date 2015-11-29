@@ -10,16 +10,27 @@ quizMe = function(message, username, res) {
     });
   } else if (message.indexOf('new question') > -1) {
     question.update({ 'currentQuestion' : true }, { $set: { 'currentQuestion' : false } }, { multi: true }).exec();
-    question.random(function(err, data) {
-      data.currentQuestion = true;
-      data.save();
-      res.json({
-        text: data.question,
-        attachments: [],
-        username: 'QuizMe!',
-        icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
-      });
+    question.randomQuestion(function(err, data) {
+      if (data) {
+        data.currentQuestion = true;
+        data.save();
+        res.json({
+          text: data.question,
+          attachments: [],
+          username: 'QuizMe!',
+          icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
+        });
+      } else {
+        res.json({
+          text: "All questions have been completed.",
+          attachments: [],
+          username: 'QuizMe!',
+          icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
+        });
+      }
     });
+  } else if (message.indexOf('--currentquestion') > -1) {
+
   } else if (message.indexOf('--options') > -1) {
     question.findOne({ 'currentQuestion': true, 'completed': false }, 'question answer option1 option2 option3', function(err, data) {
       if (data) {

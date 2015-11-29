@@ -17,17 +17,21 @@ var question = new Schema({
 question.pre('save', function(next) {
   var currentDate = new Date();
   this.updated_at = currentDate;
-  if (!this.created_at)
+  if (!this.created_at) {
     this.created_at = currentDate;
+  }
+  if (!this.answeredBy) {
+    this.answeredBy = '';
+  }
   next();
 });
-question.statics.random = function(callback) {
-  this.count(function(err, count) {
+question.statics.randomQuestion = function(callback) {
+  this.where('completed', false).count(function(err, count) {
     if (err) {
       return callback(err);
     }
     var rand = Math.floor(Math.random() * count);
-    this.findOne().skip(rand).exec(callback);
+    this.findOne({ 'completed': false }).skip(rand).exec(callback);
   }.bind(this));
 };
 

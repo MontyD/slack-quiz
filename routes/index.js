@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 
 router.get('/RANDquest', function(req, res, next){
   question.update({currentQuestion: true}, { $set: {currentQuestion: false} }, { multi: true }).exec();
-  question.random(function(err, data) {
+  question.randomQuestion(function(err, data) {
     data.currentQuestion = true;
     data.save();
     res.send('QUESTION: ' + data.question);
@@ -38,13 +38,18 @@ router.get('/Allquest', function(req, res, next){
 
 /* Slack post request */
 router.post('/', function(req, res) {
-  var content = req.body.text;
-  if ( req.body.trigger_word ) {
-    content = content.substr( req.body.trigger_word.length ).trim()
+  if (req.body.text && req.body.trigger_word && req.body.user_name) {
+    var content = req.body.text;
+    if ( req.body.trigger_word ) {
+      content = content.substr( req.body.trigger_word.length ).trim()
+    }
+    quizMe(content, req.body.user_name, res);
+  } else {
+    res.status(503).send('Only designed for Slack integration.');
   }
-  quizMe(content, req.body.user_name, res);
 });
 
+/* Add new question through AJAX post */
 router.post('/newQuestion', function(req, res) {
   function cleanBody(req, res, next) {
     req.body = sanitize(req.body);
