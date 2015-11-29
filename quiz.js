@@ -4,16 +4,15 @@ quizMe = function(message, username) {
   var resText = "",
     resAttach = [],
     resIcon = "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png";
-
   if (message.indexOf('--help') > -1) {
     resText = "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options (this will make the question only worth half points), or a hint using --hint (this will make the question only worth 3/4 points). If you forget what the question is you can get the current question using --currentquestion";
   } else if (message.indexOf('new question') > -1) {
-    var reqNewQuestion = '';
     question.update({ currentQuestion: true }, { $set: { currentQuestion: false } }, { multi: true }).exec();
-    question.random(function(err, data) {
+    question.random(function(err, data, callback) {
       data.currentQuestion = true;
       data.save();
-      reqNewQuestion = data.question;
+      var reqNewQuestion = data.question;
+      callback( reqNewQuestion );
     });
     console.log(reqNewQuestion);
     resText = reqNewQuestion;
