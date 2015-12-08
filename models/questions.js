@@ -9,7 +9,6 @@ var question = new Schema({
   hint: { type: String, required: true },
   updated_at : Date,
   created_at : Date,
-  intendedFor: String,
   answeredBy: String,
   completed: Boolean,
   currentQuestion: Boolean

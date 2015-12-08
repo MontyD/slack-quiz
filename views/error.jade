@@ -3,6 +3,7 @@ extends layout
 block content
   .small-container
     #PrimaryContent.content
-      h1= message
+      h1
+        a(href='/')= message
       h2= error.status
       pre #{error.stack}

@@ -1,24 +1,36 @@
 extends layout
 
 block content
-  .small-container
-    #PrimaryContent.content
-      h1= title
+  h1 
+    a(href='/')= title
+  #landing.container
+    .start
+      h2 A stack quiz for idiots
       hr
-      h2 Submit new question
+      button#initviewstats.threebuttons View Stats
+      button#initnewquestion.threebuttons New Question
+      button#initnewsaying.threebuttons New Saying
+    .newquestion
+      h2 New Question
+      #backhome
+        i.fi-home
       form#Question(action='./newQuestion', method='post')
         label(for='question') Question
         input#question.u-full-width(type='text', name='question', required='')
         label(for='answer') Answer
         input#answer.u-full-width(type='text', name='answer', required='')
-        label(for='option1') Multiple choice option one
+        label(for='option1') Fake answer one (for multiple choice)
         input#option1.u-full-width(type='text', name='option1', required='')
-        label(for='option2') Multiple choice option two
+        label(for='option2') Fake answer two
         input#option2.u-full-width(type='text', name='option2', required='')
-        label(for='option3') Multiple choice option three
+        label(for='option3') Fake answer three
         input#option3.u-full-width(type='text', name='option3', required='')
         label(for='hint') Hint
         input#hint.u-full-width(type='text', name='hint', required='')
-        label(for='intended') Who is this question intended for?
-        input#intended.u-full-width(type='text', name='intended')
         input#submit(type='submit', value='Submit')
+      form#tryQuestion(action='./demoQuestion', method='post')
+        hr
+        h3 Try your question out...
+        #demoresponse
+        input#demoanswer(type='text', name='demoanswer' placeholder='Type here...')
+        input#demoid.hidden(type='text', name='_id', readonly='') 

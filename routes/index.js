@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var quizMe = require('../quiz');
+var demoQuiz = require('../demoQuiz');
 var mongoose = require('mongoose');
 var sanitize = require("mongo-sanitize");
 var question = require('../models/questions');
@@ -41,11 +42,21 @@ router.post('/', function(req, res) {
   if (req.body.text && req.body.trigger_word && req.body.user_name) {
     var content = req.body.text;
     if ( req.body.trigger_word ) {
-      content = content.substr( req.body.trigger_word.length ).trim()
+      content = content.substr( req.body.trigger_word.length ).trim();
     }
     quizMe(content, req.body.user_name, res);
   } else {
     res.status(503).send('Only designed for Slack integration.');
+  }
+});
+
+/* Demo question post request */
+router.post('/demoQuestion', function(req, res) {
+  if (req.body._id && req.body.demoanswer) {
+    var trimBody = req.body.demoanswer.replace(/quizme/gi, '').trim();
+    demoQuiz(trimBody, req.body._id, res);
+  } else {
+    res.status(503).send('Get out of here!');
   }
 });
 
@@ -62,7 +73,6 @@ router.post('/newQuestion', function(req, res) {
     option2: req.body.option2,
     option3: req.body.option3,
     hint: req.body.hint,
-    intendedFor: req.body.intended,
     completed: false,
     currentQuestion: false
   });
@@ -70,7 +80,7 @@ router.post('/newQuestion', function(req, res) {
     if (err) {
       res.send(err);
     } else {
-      res.send('done');
+      res.json(newQuestion);
     }
   });
 });
