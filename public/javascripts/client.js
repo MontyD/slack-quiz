@@ -36,6 +36,7 @@ $("#tryQuestion").submit(function(e) {
 
 $('#demoanswer').keypress(function(e) {
   if (e.which == 13) {
+    $(this).val('');
     $('form#tryQuestion').submit();
     return false;
   }
