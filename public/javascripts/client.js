@@ -16,7 +16,7 @@ $("#Question").submit(function(e) {
         $('#tryQuestion').fadeIn(500);
       });
       $('#demoid').val(data._id);
-      typeResponse('Type "New question" to receive your question, or "--help" for help');
+      typeResponse('Type "new question" to receive your question, or "--help" for help');
     }
   });
   e.preventDefault();
