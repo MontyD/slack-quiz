@@ -1,6 +1,6 @@
 var question = require('./models/questions');
 
-demoQuiz = function(message, questionID, res) {
+var demoQuiz = function(message, questionID, res) {
   if (message.indexOf('--help') > -1) {
     res.json({
       text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options (this will make the question only worth half points), or a hint using --hint (this will make the question only worth 3/4 points)."
@@ -16,7 +16,7 @@ demoQuiz = function(message, questionID, res) {
   } else if (message.indexOf('--options') > -1) {
     question.findOne({
         '_id': questionID
-      }, 'question option1 option2 option3',
+      }, 'question option1 option2 option3 answer',
       function(err, data) {
         if (data) {
           var tempAttach = [data.answer, data.option1, data.option2, data.option3];

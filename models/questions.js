@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var question = new Schema({
+var questionSchema = new Schema({
   question: { type: String, required: true, unique: true },
   answer: { type: String, required: true },
   option1: { type: String, required: true },
@@ -13,7 +13,7 @@ var question = new Schema({
   completed: Boolean,
   currentQuestion: Boolean
 });
-question.pre('save', function(next) {
+questionSchema.pre('save', function(next) {
   var currentDate = new Date();
   this.updated_at = currentDate;
   if (!this.created_at) {
@@ -24,7 +24,7 @@ question.pre('save', function(next) {
   }
   next();
 });
-question.statics.randomQuestion = function(callback) {
+questionSchema.statics.randomQuestion = function(callback) {
   this.where('completed', false).count(function(err, count) {
     if (err) {
       return callback(err);
@@ -34,6 +34,6 @@ question.statics.randomQuestion = function(callback) {
   }.bind(this));
 };
 
-var question = mongoose.model('Question', question);
+var question = mongoose.model('Question', questionSchema);
 
 module.exports = question;
