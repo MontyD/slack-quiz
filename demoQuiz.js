@@ -3,7 +3,7 @@ var question = require('./models/questions');
 var demoQuiz = function(message, questionID, res) {
   if (message.indexOf('--help') > -1) {
     res.json({
-      text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options (this will make the question only worth half points), or a hint using --hint (this will make the question only worth 3/4 points)."
+      text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options, or a hint using --hint."
     });
   } else if (message.indexOf('new question') > -1) {
     question.findOne({
@@ -27,7 +27,7 @@ var demoQuiz = function(message, questionID, res) {
             tempAttach[j] = temp;
           }
           res.json({
-            text: data.question + " - this question is only worth 1/2 points now! 1. " + tempAttach[0] + " 2. " + tempAttach[1] + ' 3. ' + tempAttach[2] + ' 4. ' + tempAttach[3]
+            text: data.question + " 1. " + tempAttach[0] + " 2. " + tempAttach[1] + ' 3. ' + tempAttach[2] + ' 4. ' + tempAttach[3]
           });
         }
       });

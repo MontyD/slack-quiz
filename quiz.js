@@ -94,7 +94,7 @@ var quizMe = function(message, username, res) {
           tempAttach[j] = temp;
         }
         res.json({
-          text: data.question + " - this question is only worth 1/2 points now!",
+          text: data.question,
           attachments: [{
             'text': tempAttach[0],
             'color': '#01579B'
