@@ -5,6 +5,8 @@ var demoQuiz = require('../demoQuiz');
 var mongoose = require('mongoose');
 var sanitize = require("mongo-sanitize");
 var question = require('../models/questions');
+var question = require('../models/questions');
+var user = require('../models/users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
