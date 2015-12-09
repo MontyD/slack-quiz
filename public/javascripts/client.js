@@ -36,8 +36,8 @@ $("#tryQuestion").submit(function(e) {
 
 $('#demoanswer').keypress(function(e) {
   if (e.which == 13) {
-    $(this).val('');
     $('form#tryQuestion').submit();
+    $(this).val('');
     return false;
   }
 });
@@ -57,6 +57,9 @@ function typeResponse(text) {
 }
 
 $('#initnewquestion').click(function() {
+  $('h1').animate({
+    'margin-top': 20
+  }, 500);
   $('.start').animate({
     'top': -30,
     'opacity': 0
@@ -71,6 +74,9 @@ $('#initnewquestion').click(function() {
 });
 
 $('#backhome').click(function() {
+  $('h1').animate({
+    'margin-top': '10%'
+  }, 500);
   $('.newquestion').animate({
     'top': -30,
     'opacity': 0
@@ -81,5 +87,8 @@ $('#backhome').click(function() {
       'opacity': 1
     });
     $('.start').fadeIn(500);
+    $('h1').animate({
+      'margin-top': '10%'
+    }, 500);
   });
 });
