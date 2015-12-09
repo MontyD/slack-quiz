@@ -2,10 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var userScheme = new Schema({
   username: { type: String, required: true, unique: true },
-  correct: { type: Number },
-  incorrect: { type: Number }
+  correct: Number,
+  incorrect: Number
 });
 
-var user = mongoose.model('User', userScheme);
+var user = mongoose.model('user', userScheme);
 
 module.exports = user;

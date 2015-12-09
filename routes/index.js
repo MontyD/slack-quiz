@@ -5,26 +5,6 @@ var demoQuiz = require('../demoQuiz');
 var mongoose = require('mongoose');
 var sanitize = require("mongo-sanitize");
 var question = require('../models/questions');
-var user = require('../models/users');
-
-var findUser = function(reqUsername) {
-  console.log('find user');
-  user.findOne({ 'username' : reqUsername }, 'username', function(err, data) {
-    if (err) throw error;
-    if (data && data.username !== 'undefined' && data.username !== '') {
-      return username;
-    } else {
-      var newUser = user({
-        username: reqUsername
-      });
-      newUser.save(function(err) {
-        if (err) throw err;
-        return newUser.username;
-      });
-    }
-  });
-}
-
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -64,7 +44,6 @@ router.get('/allusers', function(req, res, next){
 
 /* Slack post request */
 router.post('/', function(req, res) {
-  var user = findUser(req.user_name);
   if (req.body.text && req.body.trigger_word && req.body.user_name) {
     var content = req.body.text;
     if ( req.body.trigger_word ) {
