@@ -7,23 +7,78 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var mongoose = require('mongoose');
+var db = require('./models/db');
+var sanitize = require('mongo-sanitize');
 var app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
-
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var dbUrl = process.env.MONGOLAB_URI || 'mongodb://localhost/quizme';
 mongoose.connect(dbUrl);
 
-app.use('/', routes);
+var verifySlack = function(req, res, next) {
+  if (req.body.text && req.body.trigger_word && req.body.user_name) {
+    var content = req.body.text;
+    if (req.body.trigger_word) {
+      content = content.substr(req.body.trigger_word.length + 1).trim();
+    }
+    req.body.content = content;
+    next();
+  } else {
+    res.status(503).send('Only designed for Slack integration.');
+  }
+}
+
+var verifyDemo = function(req, res, next) {
+  if (req.body._id && req.body.demoanswer) {
+    var trimBody = req.body.demoanswer.replace(/quiz/gi, '').trim();
+    req.body.content = trimBody;
+    next();
+  } else {
+    res.json({
+      'error': true,
+      'errorDescription': 'No question ID, or answer given'
+    });
+  }
+}
+
+/* sanitize req.body */
+var cleanBody = function(req, res, next) {
+  req.body = sanitize(req.body);
+  next();
+}
+
+var logRequest = function(req, res, next) {
+  next();
+}
+
+/* GET home page. */
+app.get('/', routes.homepage);
+
+/* Slack post request */
+app.post('/', verifySlack, routes.slackRequest);
+
+/* Demo question webservice */
+app.post('/demoQuestion', verifyDemo, db.questionById, routes.demoQuestion);
+
+/* AJAX post to new create new question */
+app.post('/newQuestion', logRequest, cleanBody, db.newQuestion);
+
+app.get('/dropit', function(req, res){
+  mongoose.connection.db.dropDatabase(function(err, result) {
+    res.send(result);
+  });
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -32,7 +87,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handlers
 
 // development error handler
 // will print stacktrace

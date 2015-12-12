@@ -4,7 +4,7 @@ var user = require('./models/users');
 var quizMe = function(message, username, res) {
   if (message.indexOf('--help') > -1) {
     res.json({
-      text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options, or a hint using --hint. If you forget what the question is you can get the current question using --currentquestion",
+      text: "Use 'Quiz new question' to request a new question, this will return a question. You can then answer the question using 'Quiz ' followed by your answer. You can request multiple choice options using --options, or a hint using --hint. If you forget what the question is you can get the current question using --currentquestion",
       attachments: [],
       username: 'QuizMe!',
       icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
@@ -52,7 +52,7 @@ var quizMe = function(message, username, res) {
         });
       } else {
         res.json({
-          text: "There is currently no open question, request a new question using 'QUIZME new question'.",
+          text: "There is currently no open question, request a new question using 'Quiz new question'.",
           attachments: [],
           username: 'QuizMe!',
           icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
@@ -73,7 +73,7 @@ var quizMe = function(message, username, res) {
         });
       } else {
         res.json({
-          text: "There is currently no open question, request a new question using 'QUIZME new question'.",
+          text: "There is currently no open question, request a new question using 'Quiz new question'.",
           attachments: [],
           username: 'QuizMe!',
           icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
@@ -113,7 +113,7 @@ var quizMe = function(message, username, res) {
         });
       } else {
         res.json({
-          text: "There is currently no open question, request a new question using 'QUIZME new question'.",
+          text: "There is currently no open question, request a new question using 'Quiz new question'.",
           attachments: [],
           username: 'QuizMe!',
           icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
@@ -140,7 +140,7 @@ var quizMe = function(message, username, res) {
           }).exec();
           updateUser(username, true);
           res.json({
-            text: "Your answer " + message.trim() + " is Correct! Five form points! Get yourself a new question using 'QUIZME new question'.",
+            text: "Your answer " + message.trim() + " is Correct! Five form points! Get yourself a new question using 'Quiz new question'.",
             attachments: [],
             username: 'QuizMe!',
             icon_url: "http://www.clker.com/cliparts/7/y/R/Y/J/T/correct-mark-hi.png"
@@ -156,7 +156,7 @@ var quizMe = function(message, username, res) {
         }
       } else {
         res.json({
-          text: "There is currently no open question, request a new question using 'QUIZME new question'.",
+          text: "There is currently no open question, request a new question using 'Quiz new question'.",
           attachments: [],
           username: 'QuizMe!',
           icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"
@@ -171,7 +171,6 @@ var quizMe = function(message, username, res) {
       if (err) console.log(err);
       if (data && data.username !== 'undefined' && data.username !== '') {
         if (answer) {
-          te
           user.update({
             'username': data.username
           }, {
