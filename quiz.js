@@ -31,7 +31,7 @@ var quizMe = function(message, username, res) {
         });
       } else {
         res.json({
-          text: "All questions have been completed.",
+          text: "All questions have been completed. Got to <http://slackquiz.herokuapp.com/|here > to write a new one",
           attachments: [],
           username: 'QuizMe!',
           icon_url: "http://theimpossiblequiz.org.uk/wp-content/uploads/2015/02/pa_quiz.png"

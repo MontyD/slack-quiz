@@ -58,10 +58,6 @@ var cleanBody = function(req, res, next) {
   next();
 }
 
-var logRequest = function(req, res, next) {
-  next();
-}
-
 /* GET home page. */
 app.get('/', routes.homepage);
 
@@ -72,13 +68,11 @@ app.post('/', verifySlack, routes.slackRequest);
 app.post('/demoQuestion', verifyDemo, db.questionById, routes.demoQuestion);
 
 /* AJAX post to new create new question */
-app.post('/newQuestion', logRequest, cleanBody, db.newQuestion);
+app.post('/newQuestion', cleanBody, db.newQuestion);
 
-app.get('/dropit', function(req, res){
-  mongoose.connection.db.dropDatabase(function(err, result) {
-    res.send(result);
-  });
-})
+/* AJAX post to get user stats */
+app.post('/getStats', db.userStats);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

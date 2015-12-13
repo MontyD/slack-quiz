@@ -15,8 +15,9 @@ $(document).ready(function() {
     $tryQuestion = $('#tryQuestion'),
     $stats = $('#stats'),
     $demoAnswer = $('#demoanswer'),
+    statsGraph,
     statsCalled = false,
-    chart;
+    graph = document.getElementById("chart").getContext("2d");
 
   function changeState($before, $after, subtitle) {
     $subtitle.fadeOut(500);
@@ -53,11 +54,9 @@ $(document).ready(function() {
     }
     if ($after === $stats) {
       $container.css({
-        'max-width': '1000px'
+        'max-width': '700px'
       });
-      if (statsCalled === false) {
-        makeGraph();
-      }
+      makeGraph();
     } else {
       $container.css({
         'max-width': '500px'
@@ -67,9 +66,52 @@ $(document).ready(function() {
   }
 
   function makeGraph() {
-    statsCalled = true;
-    chart = document.getElementById("chart").getContext("2d");
-    new Chart(chart).Bar(barData);
+    $.ajax({
+      type: "POST",
+      url: './getStats',
+      data: {
+        "gimmeStats": true
+      },
+      success: function(data) {
+        if (data.error) {
+          alertify.error('Something went wrong, have a look at the console if you are feeling brave');
+          console.log(data.errorDescription);
+          changeState($stats, $start, 'It done broke');
+        } else {
+          var usernames = [];
+          var scores = [];
+          for (var key in data) {
+            usernames.push(data[key].username);
+            scores.push(data[key].correct);
+          }
+          if (usernames.length < 1) {
+            alertify.success('No stats to give!');
+          } else {
+            drawGraph({
+              labels: usernames,
+              datasets: [{
+                fillColor: "#48A497",
+                data: scores
+              }]
+            }, statsCalled);
+            statsCalled = true;
+          }
+        }
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        allowPost = true;
+        alertify.error(xhr.status + ' error, Monty will bust out the template apology letter.');
+        console.log(thrownError);
+        changeState($stats, $start, 'It done broke');
+      }
+    });
+    return false;
+  }
+
+  function drawGraph(data, update) {
+    setTimeout(function() {
+      statsGraph = new Chart(graph).Bar(data);
+    }, 500);
   }
 
   function validateNewQuestion() {
@@ -184,7 +226,7 @@ $(document).ready(function() {
         }
       });
     } else {
-      setTimeout(function() {
+      makePost = setTimeout(function() {
         $("#tryQuestion").submit;
       }, 1000);
     }
@@ -220,23 +262,11 @@ $(document).ready(function() {
   });
 
   $('.backhome').click(function() {
-    changeState($($(this).parent()), $start, 'A slack quiz for idiots')
+    changeState($($(this).parent()), $start, 'A slack quiz for idiots');
+    return false;
   });
   $('.gohome').click(function() {
     $('.backhome').click();
+    return false;
   });
-  var barData = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [{
-        fillColor: "#48A497",
-        strokeColor: "#48A4D1",
-        data: [456, 479, 324, 569, 702, 600]
-      }, {
-        fillColor: "rgba(73,188,170,0.4)",
-        strokeColor: "rgba(72,174,209,0.4)",
-        data: [364, 504, 605, 400, 345, 320]
-      }
-
-    ]
-  }
 });

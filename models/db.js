@@ -65,3 +65,20 @@ exports.newQuestion = function(req, res) {
     }
   });
 }
+
+exports.userStats = function(req, res) {
+  if (req.body.gimmeStats) {
+    user.find({}, 'username correct incorrect', function(err, data) {
+      if (err) {
+        res.json({
+          'error': true,
+          'errorDescription': err
+        });
+      } else {
+        res.json(data);
+      }
+    });
+  } else {
+    res.status(503).send('Go away');
+  }
+}
