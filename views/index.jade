@@ -1,35 +1,34 @@
 extends layout
 
 block content
-  h1 
-    a(href='/')= title
   #landing.container
-    .start
-      h2 A stack quiz for idiots
-      hr
+    .start#start
       button#initviewstats.threebuttons View Stats
       button#initnewquestion.threebuttons New Question
-    .newquestion
-      h2 New Question
-      #backhome
+    .newquestion#newquestion
+      .backhome
         i.fi-home
-      form#Question(action='./newQuestion', method='post')
+      form#Question
         label(for='question') Question
-        input#question.u-full-width(type='text', name='question', required=true)
+        input#q1.u-full-width.newQuestionField(type='text', name='question', required=true, autofocus=true autocomplete="off")
         label(for='answer') Answer
-        input#answer.u-full-width(type='text', name='answer', required=true)
+        input#q2.u-full-width.newQuestionField(type='text', name='answer', required=true, autocomplete="off")
         label(for='option1') Fake answer one (for multiple choice)
-        input#option1.u-full-width(type='text', name='option1', required=true)
+        input#q3.u-full-width.newQuestionField(type='text', name='option1', required=true, autocomplete="off")
         label(for='option2') Fake answer two
-        input#option2.u-full-width(type='text', name='option2', required=true)
+        input#q4.u-full-width.newQuestionField(type='text', name='option2', required=true autocomplete="off")
         label(for='option3') Fake answer three
-        input#option3.u-full-width(type='text', name='option3', required=true)
+        input#q5.u-full-width.newQuestionField(type='text', name='option3', required=true, autocomplete="off")
         label(for='hint') Hint
-        input#hint.u-full-width(type='text', name='hint', required=true)
-        input#submit(type='submit', value='Submit')
-      form#tryQuestion(action='./demoQuestion', method='post')
-        hr
-        h3 Try your question out...
-        #demoresponse
-        input#demoanswer(type='text', name='demoanswer' placeholder='Type here...')
-        input#demoid.hidden(type='text', name='_id', readonly='') 
+        input#q6.u-full-width.newQuestionField(type='text', name='hint', required=true, autocomplete="off")
+        input#submit(type='submit', value='Submit', tabindex="-1")
+    form#tryQuestion
+      .backhome
+        i.fi-home
+      #demoresponse
+      input#demoanswer(type='text', autofocus=true, name='demoanswer' placeholder='Type here...')
+      input#demoid.hidden(type='text', name='_id', readonly='') 
+    #stats
+      .backhome
+        i.fi-home
+      canvas#chart(width='600', height='400')

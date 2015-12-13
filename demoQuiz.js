@@ -3,7 +3,7 @@ var question = require('./models/questions');
 var demoQuiz = function(message, reqObject, res) {
   if (message.indexOf('--help') > -1) {
     res.json({
-      text: "Use 'QUIZME new question' to request a new question, this will return a question. You can then answer the question using 'QUIZME ' followed by your answer. You can request multiple choice options using --options, or a hint using --hint."
+      text: "Use 'Quiz new question' to request a new question, this will return a question. You can then answer the question using 'Quiz ' followed by your answer. You can request multiple choice options using --options, or a hint using --hint."
     });
   } else if (message.indexOf('new question') > -1) {
     res.json({
@@ -11,6 +11,7 @@ var demoQuiz = function(message, reqObject, res) {
     });
   } else if (message.indexOf('--options') > -1) {
     var tempAttach = [reqObject.answer, reqObject.option1, reqObject.option2, reqObject.option3];
+    console.log(tempAttach);
     for (var i = tempAttach.length - 1; i > 0; i--) {
       var j = Math.floor(Math.random() * (i + 1));
       var temp = tempAttach[i];
@@ -18,7 +19,7 @@ var demoQuiz = function(message, reqObject, res) {
       tempAttach[j] = temp;
     }
     res.json({
-      text: data.question + " 1. " + tempAttach[0] + " 2. " + tempAttach[1] + ' 3. ' + tempAttach[2] + ' 4. ' + tempAttach[3]
+      text: (reqObject.question + " 1. " + tempAttach[0] + " 2. " + tempAttach[1] + ' 3. ' + tempAttach[2] + ' 4. ' + tempAttach[3])
     });
   } else if (message.indexOf('--hint') > -1) {
     res.json({

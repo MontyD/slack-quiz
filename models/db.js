@@ -49,10 +49,17 @@ exports.newQuestion = function(req, res) {
   });
   newQuestion.save(function(err) {
     if (err) {
-      res.json({
-        'error': true,
-        'errorDescription': err
-      });
+      if (err.code === 11000) {
+        res.json({
+          'error': true,
+          'errorDescription': 'Well, this is embarassing, that exact question has already been submitted, try again!'
+        });
+      } else {
+        res.json({
+          'error': true,
+          'errorDescription': err
+        });
+      }
     } else {
       res.json(newQuestion);
     }
